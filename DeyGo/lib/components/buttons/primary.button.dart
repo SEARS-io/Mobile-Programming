@@ -7,20 +7,22 @@ class PrimaryButton extends StatelessWidget {
   final String content;
   bool disabled = false;
   bool hasShadow = false;
+  double? padding;
 
   PrimaryButton(
       {super.key,
       required this.onPressed,
       required this.content,
       this.disabled = false,
-      this.hasShadow = false});
+      this.hasShadow = false,
+      this.padding});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
         onPressed: disabled ? null : onPressed,
         style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(padding ?? 20),
             textStyle: GoogleFonts.urbanist(
               fontSize: 17,
               fontWeight: FontWeight.w700,
