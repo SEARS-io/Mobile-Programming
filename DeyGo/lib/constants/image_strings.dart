@@ -1,5 +1,6 @@
 // Global Images
 const String gImageLoading = 'assets/images/loading.png';
+const String gImagePageIcon = 'assets/images/page_icon.png';
 
 // Splash Images
 const String sBackground = 'assets/images/background.png';
@@ -18,3 +19,7 @@ const String aImageFb = 'assets/images/auth_images/facebook.png';
 const String fpImagePerson =
     'assets/images/account_setup_images/person_circle.png';
 const String vaImageUpload = 'assets/images/account_setup_images/upload.png';
+
+// Bookings And Rides Images
+const brImageFrom = 'assets/images/bookings_and_rides_images/from.png';
+const brImageTo = 'assets/images/bookings_and_rides_images/to.png';

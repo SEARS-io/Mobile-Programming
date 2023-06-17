@@ -4,3 +4,7 @@ const String iconEyeCrossed = 'assets/images/icon_images/eye_crossed.png';
 const String iconLock = 'assets/images/icon_images/lock.png';
 const String iconPerson = 'assets/images/icon_images/person.png';
 const String iconEdit = 'assets/images/icon_images/edit.png';
+const String iconBooking = 'assets/images/booking.png';
+const String iconLocation = 'assets/images/location.png';
+const String iconProfile = 'assets/images/profile.png';
+const String iconChevron = 'assets/images/chevron_down.png';

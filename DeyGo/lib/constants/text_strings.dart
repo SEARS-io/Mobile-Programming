@@ -1,3 +1,12 @@
+// Global Text
+
+const String gTabActive = 'Active Now';
+const String gTabCompleted = 'Completed';
+const String gTabCancelled = 'Cancelled';
+const String gMenuBookings = 'Bookings';
+const String gMenuHome = 'Home';
+const String gMenuProfile = 'Profile';
+
 // Splash Screen Text
 const String sWelcome = 'Welcome To';
 const String sAppName = 'DeyGo';
@@ -47,3 +56,6 @@ const String vaBack = 'Back';
 const String vaSelectGallery = 'Gallery';
 const String vaSelectCamera = 'Camera';
 const String vaSelect = 'Select Image From';
+
+// Bookings Screen Text
+const String bTitle = 'My Bookings';
