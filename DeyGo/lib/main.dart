@@ -1,5 +1,6 @@
 import 'package:deygo/components/inputs/inputs.dart';
 import 'package:deygo/screens/account_setup/fill_profile.dart';
+import 'package:deygo/screens/account_setup/verify_account.dart';
 import 'package:deygo/screens/authentication/create_account.dart';
 import 'package:deygo/screens/authentication/get_in_screen.dart';
 import 'package:deygo/screens/authentication/login.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'DeyGo',
       theme: AppTheme.theme,
-      home: FillProfile(),
+      home: const VerifyAccount(),
     );
   }
 }

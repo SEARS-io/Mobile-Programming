@@ -42,7 +42,7 @@ class GetIn extends StatelessWidget {
             ),
           ),
           SizedBox.fromSize(
-            size: Size.fromHeight(16),
+            size: const Size.fromHeight(16),
           ),
           SizedBox(
             width: double.infinity,

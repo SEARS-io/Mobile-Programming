@@ -17,3 +17,4 @@ const String aImageFb = 'assets/images/auth_images/facebook.png';
 // Account Setup Images
 const String fpImagePerson =
     'assets/images/account_setup_images/person_circle.png';
+const String vaImageUpload = 'assets/images/account_setup_images/upload.png';

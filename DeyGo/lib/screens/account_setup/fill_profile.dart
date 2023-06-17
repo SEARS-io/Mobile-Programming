@@ -2,10 +2,8 @@ import 'package:deygo/components/buttons/primary.button.dart';
 import 'package:deygo/components/inputs/inputs.dart';
 import 'package:flutter/material.dart';
 import 'package:deygo/constants/icon_strings.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../components/global_widgets/congratulations_dialog.dart';
-import '../../constants/image_strings.dart';
 import '../../constants/text_strings.dart';
 
 class FillProfile extends StatefulWidget {

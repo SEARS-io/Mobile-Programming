@@ -38,3 +38,12 @@ const String fpContinue = 'Continue';
 const String fpCongratulations = 'Congratulations';
 const String fpAccountReady =
     'Your account is ready to use. You will be redirected to the home page in a few seconds';
+
+// Verify Account Screen Text
+const String vaTitle = 'Verify your account';
+const String vaUpload = 'Upload your Driver’s License';
+const String vaFront = 'Front';
+const String vaBack = 'Back';
+const String vaSelectGallery = 'Gallery';
+const String vaSelectCamera = 'Camera';
+const String vaSelect = 'Select Image From';
