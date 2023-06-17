@@ -1,4 +1,5 @@
 import 'package:deygo/components/inputs/inputs.dart';
+import 'package:deygo/screens/authentication/create_account.dart';
 import 'package:deygo/screens/authentication/get_in_screen.dart';
 import 'package:deygo/screens/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'DeyGo',
       theme: AppTheme.theme,
-      home: SplashScreen(),
+      home: CreateAccount(),
     );
   }
 }

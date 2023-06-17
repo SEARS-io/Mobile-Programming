@@ -1,4 +1,5 @@
 // import 'package:deygo/presentation/custom_icons_icons.dart';
+import 'package:deygo/constants/icon_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,12 +18,12 @@ class PhoneInput extends InputBase {
       controller: controller,
       decoration: InputDecoration(
         hintStyle: GoogleFonts.urbanist(),
-        prefixIcon: const Icon(Icons.phone),
+        prefixIcon: const ImageIcon(AssetImage(icon237)),
         border: const OutlineInputBorder(
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.all(Radius.circular(10))),
         hintText: 'Phone Number',
-        contentPadding: const EdgeInsets.all(25),
+        contentPadding: const EdgeInsets.all(20),
         fillColor: Theme.of(context).colorScheme.surface,
         // prefixIconColor: Theme.of(context).colorScheme.onSurface,
         focusColor: Theme.of(context).colorScheme.primary,
@@ -64,11 +65,11 @@ class _PasswordInputState extends State<PasswordInput> {
       controller: controller,
       decoration: InputDecoration(
         hintStyle: GoogleFonts.urbanist(),
-        prefixIcon: const Icon(Icons.lock_outline),
+        prefixIcon: const ImageIcon(AssetImage(iconLock)),
         suffixIcon: IconButton(
-          icon: Icon(showPassword
-              ? Icons.remove_red_eye_outlined
-              : Icons.remove_red_eye),
+          icon: showPassword
+              ? const Icon(Icons.remove_red_eye)
+              : const ImageIcon(AssetImage(iconEyeCrossed)),
           onPressed: () {
             setState(() {
               showPassword = !showPassword;
@@ -79,7 +80,7 @@ class _PasswordInputState extends State<PasswordInput> {
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.all(Radius.circular(10))),
         hintText: 'Password',
-        contentPadding: const EdgeInsets.all(25),
+        contentPadding: const EdgeInsets.all(20),
         fillColor: Theme.of(context).colorScheme.surface,
         // prefixIconColor: Theme.of(context).colorScheme.onSurface,
         filled: true,
@@ -115,7 +116,7 @@ class TextInput extends InputBase {
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.all(Radius.circular(10))),
         hintText: hintText,
-        contentPadding: const EdgeInsets.all(25),
+        contentPadding: const EdgeInsets.all(20),
         fillColor: Theme.of(context).colorScheme.surface,
         // prefixIconColor: Theme.of(context).colorScheme.onSurface,
         filled: true,
@@ -130,6 +131,53 @@ class TextInput extends InputBase {
       ),
       textAlign: TextAlign.left,
       keyboardType: TextInputType.text,
+    );
+  }
+}
+
+class CheckBoxInput extends StatelessWidget {
+  const CheckBoxInput({
+    super.key,
+    required this.title,
+    required this.onChanged,
+    required this.value,
+  });
+
+  final String title;
+  final void Function(bool?) onChanged;
+  final bool? value;
+
+  @override
+  Widget build(BuildContext context) {
+    return CheckboxListTile(
+      title: Text(
+        title,
+        style: GoogleFonts.urbanist(
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+            color: Theme.of(context).colorScheme.secondary),
+      ),
+      value: value,
+      checkboxShape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
+        side: BorderSide(
+          color: Theme.of(context).primaryColor,
+          width: 3,
+          style: BorderStyle.solid,
+          strokeAlign: BorderSide.strokeAlignOutside,
+        ),
+      ),
+      onChanged: onChanged,
+      controlAffinity: ListTileControlAffinity.leading,
+      activeColor: Theme.of(context).primaryColor,
+      side: BorderSide(
+        color: Theme.of(context).primaryColor,
+        width: 3,
+        style: BorderStyle.solid,
+        strokeAlign: BorderSide.strokeAlignOutside,
+      ),
+      dense: true,
+      visualDensity: const VisualDensity(horizontal: -4, vertical: -2),
     );
   }
 }

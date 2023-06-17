@@ -22,3 +22,6 @@ const String aSignUp = 'Sign up';
 const String aSignInPassword = 'Sign in with password';
 const String aContinueWith = 'or continue with';
 const String aOr = 'or';
+const String aCreateAccount = 'Create your Account';
+const String aRemember = 'Remember me';
+const String aDriver = 'I am a Driver';
