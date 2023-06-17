@@ -39,6 +39,7 @@ dependencies:
   flutter_native_splash: ^2.2.19
   get: ^4.6.5
   image_picker: ^0.8.9
+  convex_bottom_bar: ^3.2.0
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +70,7 @@ flutter:
     - assets/images/auth_images/
     - assets/images/icon_images/
     - assets/images/account_setup_images/
+    - assets/images/bookings_and_rides_images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
