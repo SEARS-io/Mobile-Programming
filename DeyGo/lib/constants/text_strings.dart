@@ -25,3 +25,16 @@ const String aOr = 'or';
 const String aCreateAccount = 'Create your Account';
 const String aRemember = 'Remember me';
 const String aDriver = 'I am a Driver';
+const String aLoginAccount = 'Login to your Account';
+const String aLogin = 'Log in';
+
+// Fill Profile Screen Text
+const String fpTitle = 'Fill Your Profile';
+const String fpFullName = 'Full Name';
+const String fpEmail = 'Email';
+const String fpLocation = 'Location';
+const String fpUnionNumber = 'Union Number';
+const String fpContinue = 'Continue';
+const String fpCongratulations = 'Congratulations';
+const String fpAccountReady =
+    'Your account is ready to use. You will be redirected to the home page in a few seconds';

@@ -1,6 +1,8 @@
 import 'package:deygo/components/inputs/inputs.dart';
+import 'package:deygo/screens/account_setup/fill_profile.dart';
 import 'package:deygo/screens/authentication/create_account.dart';
 import 'package:deygo/screens/authentication/get_in_screen.dart';
+import 'package:deygo/screens/authentication/login.dart';
 import 'package:deygo/screens/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'DeyGo',
       theme: AppTheme.theme,
-      home: CreateAccount(),
+      home: FillProfile(),
     );
   }
 }

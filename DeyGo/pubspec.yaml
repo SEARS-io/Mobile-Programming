@@ -67,6 +67,7 @@ flutter:
     - assets/images/onboarding_images/
     - assets/images/auth_images/
     - assets/images/icon_images/
+    - assets/images/account_setup_images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
