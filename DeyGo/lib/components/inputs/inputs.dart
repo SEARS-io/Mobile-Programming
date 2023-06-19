@@ -1,7 +1,11 @@
 // import 'package:deygo/presentation/custom_icons_icons.dart';
 import 'package:deygo/constants/icon_strings.dart';
+import 'package:deygo/redux/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../redux/actions.dart';
 
 abstract class InputBase extends StatelessWidget {
   const InputBase({super.key, required this.controller});
@@ -136,48 +140,60 @@ class TextInput extends InputBase {
 }
 
 class CheckBoxInput extends StatelessWidget {
-  const CheckBoxInput({
-    super.key,
-    required this.title,
-    required this.onChanged,
-    required this.value,
-  });
+  CheckBoxInput(
+      {super.key,
+      required this.title,
+      required this.onChanged,
+      required this.value,
+      this.internalState = false});
 
   final String title;
   final void Function(bool?) onChanged;
   final bool? value;
+  bool internalState = false;
 
   @override
   Widget build(BuildContext context) {
-    return CheckboxListTile(
-      title: Text(
-        title,
-        style: GoogleFonts.urbanist(
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-            color: Theme.of(context).colorScheme.secondary),
-      ),
-      value: value,
-      checkboxShape: RoundedRectangleBorder(
-        borderRadius: const BorderRadius.all(Radius.circular(5)),
+    return StoreConnector<AppState, bool>(
+      converter: (store) {
+        return store.state.isDriver;
+      },
+      builder: (context, bool isDriver) => CheckboxListTile(
+        title: Text(
+          title,
+          style: GoogleFonts.urbanist(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.secondary),
+        ),
+        value: internalState ? isDriver : value,
+        checkboxShape: RoundedRectangleBorder(
+          borderRadius: const BorderRadius.all(Radius.circular(5)),
+          side: BorderSide(
+            color: Theme.of(context).primaryColor,
+            width: 3,
+            style: BorderStyle.solid,
+            strokeAlign: BorderSide.strokeAlignOutside,
+          ),
+        ),
+        onChanged: (val) {
+          internalState
+              ? StoreProvider.of<AppState>(context).dispatch(
+                  UpdateIsDriverAction(val ?? false),
+                )
+              : onChanged(val);
+        },
+        controlAffinity: ListTileControlAffinity.leading,
+        activeColor: Theme.of(context).primaryColor,
         side: BorderSide(
           color: Theme.of(context).primaryColor,
           width: 3,
           style: BorderStyle.solid,
           strokeAlign: BorderSide.strokeAlignOutside,
         ),
+        dense: true,
+        visualDensity: const VisualDensity(horizontal: -4, vertical: -2),
       ),
-      onChanged: onChanged,
-      controlAffinity: ListTileControlAffinity.leading,
-      activeColor: Theme.of(context).primaryColor,
-      side: BorderSide(
-        color: Theme.of(context).primaryColor,
-        width: 3,
-        style: BorderStyle.solid,
-        strokeAlign: BorderSide.strokeAlignOutside,
-      ),
-      dense: true,
-      visualDensity: const VisualDensity(horizontal: -4, vertical: -2),
     );
   }
 }

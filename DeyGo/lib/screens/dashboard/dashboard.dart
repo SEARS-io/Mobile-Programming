@@ -1,18 +1,27 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:deygo/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'bookings.dart';
+import 'map.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+  const Dashboard({super.key, required this.isDriver});
+
+  final bool isDriver;
 
   @override
-  State<Dashboard> createState() => _DashboardState();
+  // ignore: no_logic_in_create_state
+  State<Dashboard> createState() => _DashboardState(isDriver);
 }
 
 class _DashboardState extends State<Dashboard> {
+  final bool isDriver;
+
   int _pageIndex = 0;
+
+  _DashboardState(this.isDriver);
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +31,8 @@ class _DashboardState extends State<Dashboard> {
       child: Scaffold(
         body: const TabBarView(children: [
           Bookings(),
-          Center(child: Text('Tab 2')),
-          Center(child: Text('Tab 3')),
+          DeygoMap(),
+          Profile(),
         ]),
         bottomNavigationBar: StyleProvider(
           style: Style(),

@@ -1,6 +1,7 @@
 // Global Text
 
 const String gTabActive = 'Active Now';
+const String gTabActiveDriver = 'Available';
 const String gTabCompleted = 'Completed';
 const String gTabCancelled = 'Cancelled';
 const String gMenuBookings = 'Bookings';
@@ -59,3 +60,16 @@ const String vaSelect = 'Select Image From';
 
 // Bookings Screen Text
 const String bTitle = 'My Bookings';
+const String bTitleDriver = 'Ride Request';
+
+// Profile Screen Text
+const String pTitle = 'Profile';
+const String pEditProfile = 'Edit Profile';
+const String pAddress = 'Address';
+const String pPaymentHistory = 'Payment History';
+const String pNotification = 'Notification';
+const String pLogOut = 'Logout';
+
+// Edit Profile Screen Text
+const String epTitle = 'Edit Profile';
+const String epUpdate = 'Update';

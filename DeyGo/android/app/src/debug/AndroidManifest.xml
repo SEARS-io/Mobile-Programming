@@ -1,5 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.testapp">
+
+    <application android:label="testapp" android:name="${applicationName}" android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.AIzaSyDw99qadB9adLEZZ1xfdQ3jwV28RsE_TsQ"
+               android:value="AIzaSyDw99qadB9adLEZZ1xfdQ3jwV28RsE_TsQ"/>
+    </application>
     <!-- The INTERNET permission is required for development. Specifically,
          the Flutter tool needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.

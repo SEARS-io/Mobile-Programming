@@ -8,3 +8,10 @@ const String iconBooking = 'assets/images/booking.png';
 const String iconLocation = 'assets/images/location.png';
 const String iconProfile = 'assets/images/profile.png';
 const String iconChevron = 'assets/images/chevron_down.png';
+const String iconBell = 'assets/images/icon_images/bell.png';
+const String iconExit = 'assets/images/icon_images/exit.png';
+const String iconLocationOutlined =
+    'assets/images/icon_images/location_outlined.png';
+const String iconPersonOutlined =
+    'assets/images/icon_images/person_outlined.png';
+const String iconWallet = 'assets/images/icon_images/wallet.png';

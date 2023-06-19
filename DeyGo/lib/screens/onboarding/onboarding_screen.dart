@@ -79,7 +79,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               hasShadow: true,
               onPressed: () {
                 _pageIndex == screen_data.length - 1
-                    ? Get.to(const GetIn())
+                    ? Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => const GetIn()))
                     : (_pageController.nextPage(
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeOut));

@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../components/global_widgets/congratulations_dialog.dart';
 import '../../constants/text_strings.dart';
+import '../dashboard/dashboard.dart';
 
 class VerifyAccount extends StatefulWidget {
   const VerifyAccount({super.key});
@@ -37,13 +38,6 @@ class _VerifyAccountState extends State<VerifyAccount> {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              IconButton(
-                padding: EdgeInsets.zero,
-                onPressed: () {},
-                icon: const ImageIcon(
-                  AssetImage(iconBackArrow),
-                ),
-              ),
               Text(
                 vaTitle,
                 style: Theme.of(context)
@@ -92,11 +86,13 @@ class _VerifyAccountState extends State<VerifyAccount> {
             height: 120,
           ),
           PrimaryButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) => const CongratulationDialog(),
+            onPressed: () async {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => const Dashboard(
+                    isDriver: true,
+                  ),
+                ),
               );
             },
             content: fpContinue,

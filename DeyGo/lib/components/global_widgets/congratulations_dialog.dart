@@ -79,3 +79,69 @@ class _CongratulationDialogState extends State<CongratulationDialog>
     );
   }
 }
+
+class LoadingDialog extends StatefulWidget {
+  const LoadingDialog({super.key, required this.title});
+
+  final String title;
+
+  @override
+  // ignore: no_logic_in_create_state
+  State<LoadingDialog> createState() => _LoadingDialogState(title: title);
+}
+
+class _LoadingDialogState extends State<LoadingDialog>
+    with TickerProviderStateMixin {
+  AnimationController? controller;
+
+  Animation<double>? animation;
+
+  final String title;
+
+  _LoadingDialogState({required this.title});
+
+  @override
+  void initState() {
+    super.initState();
+    controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 3));
+    animation = CurvedAnimation(parent: controller!.view, curve: Curves.linear);
+    controller!.repeat();
+  }
+
+  @override
+  void dispose() {
+    controller!.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      backgroundColor: Colors.white,
+      alignment: Alignment.center,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(16)),
+      ),
+      contentPadding: const EdgeInsets.symmetric(vertical: 25, horizontal: 50),
+      children: [
+        Text(
+          title,
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 28),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        RotationTransition(
+          turns: animation!,
+          child: const Image(
+            image: AssetImage(gImageLoading),
+            width: 87,
+            height: 95,
+          ),
+        )
+      ],
+    );
+  }
+}

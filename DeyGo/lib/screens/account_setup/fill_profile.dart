@@ -1,10 +1,21 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:convert';
+
 import 'package:deygo/components/buttons/primary.button.dart';
 import 'package:deygo/components/inputs/inputs.dart';
+import 'package:deygo/http/http.dart';
+import 'package:deygo/redux/actions.dart';
+import 'package:deygo/screens/account_setup/verify_account.dart';
+import 'package:deygo/screens/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:deygo/constants/icon_strings.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
 import '../../components/global_widgets/congratulations_dialog.dart';
 import '../../constants/text_strings.dart';
+import '../../redux/app_state.dart';
+import '../../redux/models.dart';
 
 class FillProfile extends StatefulWidget {
   const FillProfile({super.key});
@@ -19,8 +30,17 @@ class _FillProfileState extends State<FillProfile> {
   final TextEditingController locationController = TextEditingController();
   final TextEditingController unionNumberController = TextEditingController();
 
+  final HTTP requests = HTTP();
+
+  @override
+  void dispose() {
+    requests.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isDriver = StoreProvider.of<AppState>(context).state.isDriver;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -31,13 +51,6 @@ class _FillProfileState extends State<FillProfile> {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              IconButton(
-                padding: EdgeInsets.zero,
-                onPressed: () {},
-                icon: const ImageIcon(
-                  AssetImage(iconBackArrow),
-                ),
-              ),
               Text(
                 fpTitle,
                 style: Theme.of(context)
@@ -100,17 +113,30 @@ class _FillProfileState extends State<FillProfile> {
           const SizedBox(
             height: 22,
           ),
-          TextInput(controller: unionNumberController, hintText: fpUnionNumber),
+          Container(
+            child: isDriver
+                ? TextInput(
+                    controller: unionNumberController, hintText: fpUnionNumber)
+                : null,
+          ),
           const SizedBox(
             height: 90,
           ),
           PrimaryButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) => const CongratulationDialog(),
-              );
+            onPressed: () async {
+              // showDialog(
+              //   context: context,
+              //   barrierDismissible: false,
+              //   builder: (BuildContext context) => const CongratulationDialog(),
+              // );
+              createAccount(context);
+              // await Future.delayed(
+              //   const Duration(milliseconds: 1200),
+              //   () {
+              //     Navigator.of(context).pushReplacement(
+              //         MaterialPageRoute(builder: (context) => const Dashboard()));
+              //   },
+              // );
             },
             content: fpContinue,
             hasShadow: true,
@@ -121,5 +147,157 @@ class _FillProfileState extends State<FillProfile> {
         ]),
       ),
     );
+  }
+
+  void createAccount(BuildContext context) async {
+    if (fullNameController.text.isEmpty ||
+        emailController.text.isEmpty ||
+        locationController.text.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Validity Error'),
+          content: const Text('Please Fill All Fields'),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.pop(context, 'Ok'),
+                child: const Text('Ok'))
+          ],
+        ),
+      );
+      return;
+    }
+
+    final isDriver = StoreProvider.of<AppState>(context).state.isDriver;
+
+    if (isDriver) {
+      if (unionNumberController.text.isEmpty) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Validity Error'),
+            content: const Text('Please Fill All Fields'),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context, 'Ok'),
+                  child: const Text('Ok'))
+            ],
+          ),
+        );
+        return;
+      }
+    }
+
+    showDialog(
+        context: context, builder: (context) => const CongratulationDialog());
+
+    final fullName = fullNameController.text;
+    final email = emailController.text;
+    final location = locationController.text;
+    final unionNumber = unionNumberController.text;
+
+    final Location _loc = Location(name: location);
+
+    final oldUser = StoreProvider.of<AppState>(context).state.user;
+    final user = User(
+      password: oldUser!.password,
+      tel: oldUser.tel,
+      email: email,
+      name: fullName,
+      current_location: _loc,
+    );
+
+    if (isDriver) {
+      // Driver Create
+      final _driver = {
+        'union_num': unionNumber,
+        'rating': 0.0,
+        'user': {
+          'data': {
+            'tel': user.tel,
+            'email': user.email,
+            'password': user.password,
+            'name': user.name,
+            'location': {
+              'data': {'name': user.current_location!.name}
+            }
+          }
+        }
+      };
+      final resdriver = await requests.Post(
+        'driver/create',
+        {'driver': _driver},
+      );
+      final driver = resdriver['insert_driver_one'];
+      if (driver == null) {
+        Navigator.pop(context);
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Opps'),
+            content:
+                const Text('Apologies, an error occured. Please try again'),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context, 'Ok'),
+                  child: const Text('Ok'))
+            ],
+          ),
+        );
+        return;
+      } else {
+        final newDriver = Driver.fromResponse(driver);
+        StoreProvider.of<AppState>(context)
+            .dispatch(UpdateDriverAction(newDriver));
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const VerifyAccount()));
+      }
+    } else {
+      // Passenger Create
+      final _passenger = {
+        'user': {
+          'data': {
+            'tel': user.tel,
+            'email': user.email,
+            'password': user.password,
+            'name': user.name,
+            'location': {
+              'data': {'name': user.current_location!.name}
+            }
+          }
+        }
+      };
+      final respassenger = await requests.Post(
+        'passenger/create',
+        {'passenger': _passenger},
+      );
+      final passenger = respassenger['insert_passenger_one'];
+      if (passenger == null) {
+        Navigator.pop(context);
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Opps'),
+            content:
+                const Text('Apologies, an error occured. Please try again'),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context, 'Ok'),
+                  child: const Text('Ok'))
+            ],
+          ),
+        );
+        return;
+      } else {
+        final newPassenger = Passenger.fromResponse(passenger);
+        StoreProvider.of<AppState>(context).dispatch(
+          UpdatePassengerAction(newPassenger),
+        );
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => const Dashboard(
+                  isDriver: false,
+                )));
+      }
+    }
   }
 }

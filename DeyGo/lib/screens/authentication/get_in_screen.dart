@@ -1,7 +1,10 @@
 import 'package:deygo/components/buttons/primary.button.dart';
 import 'package:deygo/constants/image_strings.dart';
 import 'package:deygo/constants/text_strings.dart';
+import 'package:deygo/screens/authentication/create_account.dart';
+import 'package:deygo/screens/authentication/login.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class GetIn extends StatelessWidget {
@@ -95,7 +98,14 @@ class GetIn extends StatelessWidget {
           ),
           SizedBox(
             width: double.infinity,
-            child: PrimaryButton(onPressed: () {}, content: aSignInPassword),
+            child: PrimaryButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Login()),
+                  );
+                },
+                content: aSignInPassword),
           ),
           SizedBox.fromSize(
             size: const Size.fromHeight(20),
@@ -111,7 +121,12 @@ class GetIn extends StatelessWidget {
                     color: const Color.fromRGBO(118, 111, 111, 0.65)),
               ),
               TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => const CreateAccount()),
+                    );
+                  },
                   child: Text(
                     aSignUp,
                     style: GoogleFonts.urbanist(
