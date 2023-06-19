@@ -1,3 +1,4 @@
+import 'package:deygo/screens/onboarding/onboarding_screen.dart';
 import 'package:deygo/screens/splash_screen/splash_screen.controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     splashController.startAnimation();
+    startAnimation(context);
     return Scaffold(
       body: Stack(children: [
         const SizedBox.expand(
@@ -81,6 +83,14 @@ class SplashScreen extends StatelessWidget {
           ),
         )
       ]),
+    );
+  }
+
+  Future startAnimation(BuildContext context) async {
+    await Future.delayed(const Duration(milliseconds: 2000));
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const OnboardingScreen()),
     );
   }
 }

@@ -1,11 +1,17 @@
 import 'package:deygo/components/buttons/primary.button.dart';
 import 'package:deygo/components/inputs/inputs.dart';
+import 'package:deygo/redux/actions.dart';
+import 'package:deygo/screens/account_setup/fill_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:deygo/constants/icon_strings.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../constants/image_strings.dart';
 import '../../constants/text_strings.dart';
+import '../../redux/app_state.dart';
+import '../../redux/models.dart';
+import 'login.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
@@ -35,7 +41,9 @@ class _CreateAccountState extends State<CreateAccount> {
               alignment: Alignment.centerLeft,
               child: IconButton(
                 padding: EdgeInsets.zero,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
                 icon: const ImageIcon(
                   AssetImage(iconBackArrow),
                 ),
@@ -87,13 +95,16 @@ class _CreateAccountState extends State<CreateAccount> {
                     _isDriver = val;
                   });
                 },
+                internalState: true,
               ),
             ),
             const SizedBox(
               height: 24,
             ),
             PrimaryButton(
-              onPressed: () {},
+              onPressed: () {
+                toNextPage(context);
+              },
               content: aSignUp,
               hasShadow: true,
             ),
@@ -182,7 +193,10 @@ class _CreateAccountState extends State<CreateAccount> {
                       color: const Color.fromRGBO(118, 111, 111, 0.65)),
                 ),
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => const Login()));
+                    },
                     child: Text(
                       aSignIn,
                       style: GoogleFonts.urbanist(
@@ -197,5 +211,36 @@ class _CreateAccountState extends State<CreateAccount> {
         ]),
       ),
     );
+  }
+
+  bool toNextPage(BuildContext context) {
+    if (phoneNumberController.text.isEmpty || passwordController.text.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Validity Error'),
+          content: const Text('Please Fill All Fields'),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.pop(context, 'Ok'),
+                child: const Text('Ok'))
+          ],
+        ),
+      );
+
+      return false;
+    }
+
+    final String phoneNumber = phoneNumberController.text;
+    final String password = passwordController.text;
+
+    final User _user = User(tel: phoneNumber, password: password);
+
+    StoreProvider.of<AppState>(context).dispatch(UpdateUserAction(_user));
+
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const FillProfile()));
+
+    return true;
   }
 }

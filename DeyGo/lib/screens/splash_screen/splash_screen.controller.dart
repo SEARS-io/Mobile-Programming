@@ -1,4 +1,4 @@
-import 'package:deygo/screens/onboarding/onboarding_screen.dart';
+// import 'package:deygo/screens/onboarding/onboarding_screen.dart';
 import 'package:get/get.dart';
 
 class SplashScreenController extends GetxController {
@@ -9,7 +9,5 @@ class SplashScreenController extends GetxController {
   Future startAnimation() async {
     await Future.delayed(const Duration(milliseconds: 500));
     animate.value = true;
-    await Future.delayed(const Duration(milliseconds: 2000));
-    Get.to(const OnboardingScreen());
   }
 }

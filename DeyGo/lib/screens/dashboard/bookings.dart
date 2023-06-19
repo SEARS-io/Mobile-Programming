@@ -2,10 +2,12 @@ import 'package:deygo/components/buttons/primary.button.dart';
 import 'package:deygo/constants/icon_strings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../constants/image_strings.dart';
 import '../../constants/text_strings.dart';
+import '../../redux/app_state.dart';
 
 class Bookings extends StatefulWidget {
   const Bookings({super.key});
@@ -17,6 +19,7 @@ class Bookings extends StatefulWidget {
 class _BookingsState extends State<Bookings> {
   @override
   Widget build(BuildContext context) {
+    final isDriver = StoreProvider.of<AppState>(context).state.isDriver;
     return DefaultTabController(
       length: 3,
       child: SafeArea(
@@ -36,7 +39,7 @@ class _BookingsState extends State<Bookings> {
                   ),
                 ),
                 Text(
-                  bTitle,
+                  isDriver ? bTitleDriver : bTitle,
                   style: Theme.of(context)
                       .textTheme
                       .bodyMedium!
@@ -47,35 +50,42 @@ class _BookingsState extends State<Bookings> {
             const SizedBox(
               height: 20,
             ),
-            const SizedBox(
+            SizedBox(
               height: 40,
               child: TabBar(
                 dividerColor: Colors.orange,
                 indicatorWeight: 3.5,
-                indicatorColor: Color.fromRGBO(254, 187, 27, 1),
-                labelColor: Color.fromRGBO(254, 187, 27, 1),
-                labelStyle: TextStyle(
+                indicatorColor: const Color.fromRGBO(254, 187, 27, 1),
+                labelColor: const Color.fromRGBO(254, 187, 27, 1),
+                labelStyle: const TextStyle(
                     fontFamily: 'urbanist',
                     fontFamilyFallback: ['urbanist', 'sans serif'],
                     fontSize: 17,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 1),
-                unselectedLabelColor: Color.fromRGBO(158, 158, 158, 1),
+                unselectedLabelColor: const Color.fromRGBO(158, 158, 158, 1),
                 tabs: [
-                  Tab(text: gTabActive),
-                  Tab(text: gTabCompleted),
-                  Tab(text: gTabCancelled),
+                  Tab(text: isDriver ? gTabActiveDriver : gTabActive),
+                  const Tab(text: gTabCompleted),
+                  const Tab(text: gTabCancelled),
                 ],
               ),
             ),
-            const Expanded(
+            Expanded(
               flex: 2,
               child: TabBarView(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Center(
-                      child: Accordion(),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
+                    child: ListView(
+                      children: [
+                        Accordion(),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Accordion(),
+                      ],
                     ),
                   ),
                   Center(
