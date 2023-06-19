@@ -95,3 +95,35 @@ class Driver {
     return newDriver;
   }
 }
+
+class Booking {
+  Location? locationByDestination;
+  Location? locationByLocation;
+  final String status;
+  String? time;
+  final String ride_id;
+  final int amount;
+
+  Booking({
+    required this.status,
+    this.time,
+    required this.ride_id,
+    required this.amount,
+    this.locationByDestination,
+    this.locationByLocation,
+  });
+
+  static Booking fromResponse(dynamic response) {
+    final Booking booking = Booking(
+      status: response['status'],
+      ride_id: response['ride_id'],
+      amount: response['amount'],
+      locationByDestination:
+          Location(name: response['locationByDestination']['name']),
+      locationByLocation:
+          Location(name: response['locationByLocation']['name']),
+    );
+
+    return booking;
+  }
+}

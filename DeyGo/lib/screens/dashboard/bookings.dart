@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:deygo/components/buttons/primary.button.dart';
 import 'package:deygo/constants/icon_strings.dart';
 import 'package:flutter/foundation.dart';
@@ -7,7 +9,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../constants/image_strings.dart';
 import '../../constants/text_strings.dart';
+import '../../http/http.dart';
 import '../../redux/app_state.dart';
+import '../../redux/models.dart';
 
 class Bookings extends StatefulWidget {
   const Bookings({super.key});
@@ -17,9 +21,27 @@ class Bookings extends StatefulWidget {
 }
 
 class _BookingsState extends State<Bookings> {
+  List<Booking> bookings = [];
+  bool _isFetched = false;
+
+  final HTTP requests = HTTP();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    requests.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDriver = StoreProvider.of<AppState>(context).state.isDriver;
+    getBookings(context);
+
     return DefaultTabController(
       length: 3,
       child: SafeArea(
@@ -76,23 +98,58 @@ class _BookingsState extends State<Bookings> {
               child: TabBarView(
                 children: [
                   Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 15.0),
                     child: ListView(
-                      children: [
-                        Accordion(),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Accordion(),
-                      ],
+                      children: bookings.map((booking) {
+                        return Column(
+                          children: [
+                            Accordion(
+                              booking: booking,
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        );
+                      }).toList(),
                     ),
                   ),
-                  Center(
-                    child: Text('Bookings 2'),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 15.0),
+                    child: ListView(
+                      children: bookings.map((booking) {
+                        return Column(
+                          children: [
+                            Accordion(
+                              booking: booking,
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        );
+                      }).toList(),
+                    ),
                   ),
-                  Center(
-                    child: Text('Bookings 3'),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 15.0),
+                    child: ListView(
+                      children: bookings.map((booking) {
+                        return Column(
+                          children: [
+                            Accordion(
+                              booking: booking,
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ],
               ),
@@ -102,19 +159,67 @@ class _BookingsState extends State<Bookings> {
       ),
     );
   }
+
+  Future<void> getBookings(BuildContext context) async {
+    if (_isFetched) {
+      return;
+    } else {
+      setState(() {
+        _isFetched = true;
+      });
+    }
+
+    final isDriver = StoreProvider.of<AppState>(context).state.isDriver;
+
+    if (isDriver) {
+      final driver = StoreProvider.of<AppState>(context).state.driver;
+      final resDriver = await requests.Get("driver/${driver!.driver_id}/rides");
+      final List rides = resDriver['ride_req'];
+      final _bookings = rides.map(
+        (res) {
+          final bking = Booking.fromResponse(res);
+          return bking;
+        },
+      ).toList();
+
+      setState(() {
+        bookings = _bookings;
+      });
+    } else {
+      final passenger = StoreProvider.of<AppState>(context).state.passenger;
+      final resPassenger =
+          await requests.Get("passenger/${passenger!.pass_id}/bookings");
+      final List rides = resPassenger['ride_req'];
+      final _bookings = rides.map(
+        (res) {
+          final bking = Booking.fromResponse(res);
+          return bking;
+        },
+      ).toList();
+
+      setState(() {
+        bookings = _bookings;
+      });
+    }
+  }
 }
 
 class Accordion extends StatefulWidget {
-  const Accordion({
-    super.key,
-  });
+  const Accordion({super.key, required this.booking});
+
+  final Booking booking;
 
   @override
-  State<Accordion> createState() => _AccordionState();
+  // ignore: no_logic_in_create_state
+  State<Accordion> createState() => _AccordionState(booking);
 }
 
 class _AccordionState extends State<Accordion> {
   bool _isOpen = false;
+
+  final Booking booking;
+
+  _AccordionState(this.booking);
 
   @override
   void initState() {
@@ -125,7 +230,7 @@ class _AccordionState extends State<Accordion> {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      height: _isOpen ? 285 : 114,
+      height: _isOpen ? 290 : 114,
       clipBehavior: Clip.hardEdge,
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -155,7 +260,7 @@ class _AccordionState extends State<Accordion> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Buea Town',
+                          booking.locationByDestination!.name,
                           style: GoogleFonts.urbanist(
                             fontSize: 28,
                             letterSpacing: 1,
@@ -164,7 +269,7 @@ class _AccordionState extends State<Accordion> {
                         ),
                         Chip(
                           label: Text(
-                            'pending',
+                            booking.status,
                             style: GoogleFonts.urbanist(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 12,
@@ -183,7 +288,7 @@ class _AccordionState extends State<Accordion> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          '1500',
+                          booking.amount.toString(),
                           style: GoogleFonts.urbanist(
                             fontSize: 28,
                             letterSpacing: 1,
@@ -235,7 +340,7 @@ class _AccordionState extends State<Accordion> {
                               letterSpacing: 1),
                         ),
                         Text(
-                          '00a8909f-15b2-4558-941b-715c76a9b402',
+                          booking.ride_id,
                           style: GoogleFonts.urbanist(
                               fontSize: 6,
                               fontWeight: FontWeight.w600,
@@ -248,11 +353,15 @@ class _AccordionState extends State<Accordion> {
                 const SizedBox(
                   height: 15,
                 ),
-                const From(),
+                From(
+                  value: booking.locationByLocation!.name,
+                ),
                 const SizedBox(
                   height: 10,
                 ),
-                const To(),
+                To(
+                  value: booking.locationByDestination!.name,
+                ),
                 const SizedBox(
                   height: 15,
                 ),
@@ -301,9 +410,9 @@ class _AccordionState extends State<Accordion> {
 }
 
 class From extends StatelessWidget {
-  const From({
-    super.key,
-  });
+  const From({super.key, required this.value});
+
+  final String value;
 
   @override
   Widget build(BuildContext context) {
@@ -329,7 +438,7 @@ class From extends StatelessWidget {
               ),
             ),
             Text(
-              'Mile 16, Grand Mall',
+              value,
               style: GoogleFonts.urbanist(
                 fontSize: 10,
                 fontWeight: FontWeight.w500,
@@ -344,9 +453,9 @@ class From extends StatelessWidget {
 }
 
 class To extends StatelessWidget {
-  const To({
-    super.key,
-  });
+  const To({super.key, required this.value});
+
+  final String value;
 
   @override
   Widget build(BuildContext context) {
@@ -372,7 +481,7 @@ class To extends StatelessWidget {
               ),
             ),
             Text(
-              'Mile 16, Grand Mall',
+              value,
               style: GoogleFonts.urbanist(
                 fontSize: 10,
                 fontWeight: FontWeight.w500,

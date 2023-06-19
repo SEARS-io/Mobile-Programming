@@ -44,6 +44,10 @@ class HTTP {
       );
       final decodedResponse =
           jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+      print('');
+      print('Api Response (GET):');
+      print(decodedResponse);
+      print('');
       return decodedResponse;
     } finally {}
   }
