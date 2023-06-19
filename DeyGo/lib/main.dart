@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
       child: GetMaterialApp(
         title: 'DeyGo',
         theme: AppTheme.theme,
-        home: const CreateAccount(),
+        home: SplashScreen(),
       ),
     );
   }
